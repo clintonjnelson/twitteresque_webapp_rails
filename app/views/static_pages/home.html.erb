@@ -1,10 +1,13 @@
-<!-- Comment this out to get the code to run...
-<% provide(:title, 'Home') %>
--->
 
-<h1> Sample App </h1>
-<p>
-    This is the home page for the site that I have yet to create:
-    <a href="http://www.unlist.co/"> Unlist.co </a>.
-</p>
+<div class="center hero-unit">
+  <h1> Welcome to the Sample App </h1>
 
+  <h4>
+      This is the home page for the site that I have yet to create:
+      <a href="http://www.unlist.co/"> Unlist.co </a>.
+  </h4>
+
+  <%= link_to "Sign Up Now!", signup_path, class: 'button btn-large btn-primary' %>
+</div>
+
+<%= link_to image_tag('rails.png', alt: "Rails"), 'http://rubyonrails.org/' %>
