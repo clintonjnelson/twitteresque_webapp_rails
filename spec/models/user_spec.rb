@@ -63,6 +63,17 @@ describe User do
     end
   end
 
+  # This verifies that the email converts mixed-case to downcase
+  describe 'email addresses with mixed case' do
+    let (:mixed_case_email) {'Foo@ExAMPle.CoM'}
+
+    it 'should be saved as all lower-case' do
+      @user.email = mixed_case_email
+      @user.save
+      @user.reload.email.should == mixed_case_email.downcase
+    end
+  end
+
   # This verifies that valid emails are allowed - provides some test examples
   describe 'when email format is valid' do
     it 'should be invalid' do

@@ -30,8 +30,11 @@ class User < ActiveRecord::Base
   # Constants
   VALID_EMAIL_FORMAT = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
-  # Callbacks (done prior to condition)
-  before_save { |user| user.email = email.downcase }
+  # Callbacks (done prior to condition). Two versions shown
+  # before_save { |user| user.email = email.downcase }
+  before_save { self.email.downcase! }
+
+
 
   # Attribute Validation Methods
   validates(:name,    presence: true, length: { maximum: 50})

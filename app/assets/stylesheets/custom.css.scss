@@ -1,9 +1,19 @@
 @import "bootstrap";
 
+
+/* constants */
 $my_color: #999;
 
-/* universal */
 
+/* mixins */
+@mixin box_sizing {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+
+/* universal */
 html {
   overflow-y: scroll;
 }
@@ -33,9 +43,7 @@ h4 {
 }
 
 
-
 /* typography */
-
 h1, h2, h3, h4, h5, h6 {
   line-height: 1;
 }
@@ -62,9 +70,7 @@ p {
 }
 
 
-
 /* header */
-
 #logo {
   float: left;
   margin-right: 10px;
@@ -84,8 +90,47 @@ p {
 }
 
 
-/* footer */
+/* sidebar */
+aside {
+  section {
+    padding: 10px;
+    border-top: 1px solid $my_color;
+    &:first-child {
+      border: 0;
+      padding-top: 0;
+    }
+    span {
+      display: black;
+      margin-bottom: 3px;
+      line-height: 1;
+    }
+    h1 {
+      font-size: 1.6em;
+      text-align: left;
+      letter-spacing: -1px;
+      margin-bottom: 3px;
+    }
+  }
+}
 
+.gravatar {
+  float: left;
+  margin-right: 10px;
+}
+
+
+/* forms */
+input, textarea, select, .uneditable-input {
+  border: 1px solid #bbb;
+  width: 100%;
+  padding: 10px;
+  height: auto;
+  margin-bottom: 15px;
+  @include box_sizing;
+}
+
+
+/* footer */
 /* Nesting the elements in the footer CSS to Sass standards */
 footer {
   margin-top: 45px;
@@ -116,6 +161,15 @@ footer {
   }
 }
 
+
+/* miscellaneous */
+.debug_dump {
+  clear: both;
+  float: left;
+  width: 100%;
+  margin-top: 45px;
+  @include box_sizing;
+}
 
 
 

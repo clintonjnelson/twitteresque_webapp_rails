@@ -1,7 +1,8 @@
 SampleApp::Application.routes.draw do
 
   # Keep this temporarily for routing to work, but doesn't follow REST so will later update
-  get 'users/new'
+  # get 'users/new' deleted this because now have our resources :users
+  resources :users
 
   # Root Directory Route
   root to: 'static_pages#home'
