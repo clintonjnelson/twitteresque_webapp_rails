@@ -3,6 +3,7 @@ SampleApp::Application.routes.draw do
   # Keep this temporarily for routing to work, but doesn't follow REST so will later update
   # get 'users/new' deleted this because now have our resources :users
   resources :users
+  resources :sessions, only: [:new, :create, :destroy]
 
   # Root Directory Route
   root to: 'static_pages#home'
@@ -14,6 +15,10 @@ SampleApp::Application.routes.draw do
 
   # Users Routes
   match '/signup', to: 'users#new'
+
+  # Sessions Routes
+  match '/signin',  to: 'sessions#new'
+  match '/signout', to: 'sessions#destroy', via: :delete
 end
 
 

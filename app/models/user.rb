@@ -30,17 +30,25 @@ class User < ActiveRecord::Base
   # Constants
   VALID_EMAIL_FORMAT = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
+
   # Callbacks (done prior to condition). Two versions shown
   # before_save { |user| user.email = email.downcase }
   before_save { self.email.downcase! }
-
-
+  # Creates a value to save in user for tracking sessions
+  before_save :create_remember_token
 
   # Attribute Validation Methods
   validates(:name,    presence: true, length: { maximum: 50})
   validates(:email,   presence: true,
                       format:       { with: VALID_EMAIL_FORMAT },
                       uniqueness:   { case_sensitive: false })
-  validates(:password, presence: true, length: { minimum: 6 })
-  validates(:password_confirmation,   presence: true, length: { minimum: 6 })
+  validates(:password, length: { minimum: 6 })
+  validates(:password_confirmation, presence: true)
+
+  private
+
+  # Method to create a random string & update the database attribute remember_token
+  def create_remember_token
+    self.remember_token = SecureRandom.urlsafe_base64
+  end
 end
