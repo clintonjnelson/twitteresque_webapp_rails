@@ -27,7 +27,10 @@ describe User do
   it { should respond_to(:password_confirmation)  }
   it { should respond_to(:remember_token)         }
   it { should respond_to(:authenticate)           }
+  it { should respond_to(:admin) }
   it { should be_valid }  # Verifies initial @user object is valid
+  it { should_not be_admin }
+
 
   # This test verifies that the attributes are not empty
   describe 'when name is not present' do
@@ -143,6 +146,11 @@ describe User do
       it { should_not == user_for_invalid_password }
       specify { user_for_invalid_password.should be_false }
     end
+  end
+
+  describe "with admin attribute set to true" do
+    before { @user.toggle!(:admin) }
+    it { should be_admin }
   end
 end
 
