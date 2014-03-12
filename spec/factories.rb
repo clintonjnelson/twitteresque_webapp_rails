@@ -11,4 +11,9 @@ FactoryGirl.define do
     end
   end
   # Passing :user tells FactoryGirl that the following def is for the User model object
+
+  factory :micropost do
+    content "Lorem ipsum"
+    user
+  end
 end

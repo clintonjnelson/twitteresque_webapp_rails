@@ -38,6 +38,35 @@ describe "StaticPages" do
 
     # Trigger the typcial checks method based on our let settings
     it_should_behave_like 'all static pages'
+
+    describe "for signed_in users" do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        FactoryGirl.create(:micropost, user: user, content: "Lorem Ipsum")
+        FactoryGirl.create(:micropost, user: user, content: "Other post stuff")
+        sign_in user
+        visit root_path
+      end
+      let(:count) { user.microposts.count }
+
+      it "should render the user's feed" do
+        user.feed.each do |item|
+          page.should have_selector("li##{item.id}", text: item.content)
+        end
+      end
+
+      it "should show & pluralize the user's micropost count" do
+        page.should have_content("#{count} microposts")
+      end
+
+      describe "micropost pagination" do
+        it "should paginate each user" do
+          Micropost.paginate(page: 1).each do |micropost|
+            should have_selector('li', text: micropost.content)
+          end
+        end
+      end
+    end
   end
 
   describe "Help page" do

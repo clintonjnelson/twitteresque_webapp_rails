@@ -5,31 +5,11 @@
 <div class='row'>
   <div class='span6 offset3'>
     <%= form_for(@user) do |f| %>
-      <%= render '/shared/error_messages' %>
-
-      <%= f.label       :name %>
-      <%= f.text_field  :name %>
-
-      <%= f.label       :email %>
-      <%= f.text_field  :email %>
-
-      <!-- Could CONFIRM EMAIL here:
-      <%= f.label :email %>
-      <%= f.text_field :email %>
-      -->
-
-      <%= f.label           :password %>
-      <%= f.password_field  :password %>
-
-      <!-- the extra argument overwrites the attribute name as name of the label
-      on the page, but is also the commit reference to the TDD test -->
-      <%= f.label           :password_confirmation, "Confirm Password" %>
-      <%= f.password_field  :password_confirmation                          %>
-
+      <%= render '/users/fields', f: f %>
       <%= f.submit 'Save Changes', class: 'btn btn-large btn-primary' %>
     <% end %>
 
     <%= gravatar_for @user %>
-    <%= link_to("Change", "http://gravatar.com/emails") %>
+    <%= link_to("Change", "http://gravatar.com/emails", target: '_blank') %>
   </div>
 </div>

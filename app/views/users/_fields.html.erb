@@ -1,0 +1,19 @@
+      <%= render 'shared/error_messages', object: f.object %>
+
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+
+      <!-- Could CONFIRM EMAIL here:
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+      -->
+
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+      <!-- the extra argument overwrites the attribute name as name of the label
+      on the page, but is also the commit reference to the TDD test -->
+      <%= f.label :password_confirmation, 'Confirm Password' %>
+      <%= f.password_field :password_confirmation %>

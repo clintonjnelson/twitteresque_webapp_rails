@@ -2,7 +2,7 @@
 # Users have random names but number-incremented emails starting at 1
 
 namespace :db do
-  desc "Fill in database with sample users"
+  desc "Fill in database with sample data"
   task populate: :environment do
     # Make primary user & toggle the admin attribute to ON
     admin = User.create!(name: "Example User",  #! raises error instead of "false" for easier debugging
@@ -20,6 +20,12 @@ namespace :db do
                    email: email,
                    password: password,
                    password_confirmation: password)
+    end
+
+    users = User.all(limit: 3)
+    50.times do
+      content = Faker::Lorem.sentence(5)
+      users.each { |user| user.microposts.create!(content: content)}
     end
   end
 end

@@ -19,6 +19,7 @@ describe "authentication" do
         describe "visiting the edit page" do
           before { visit edit_user_path(user) }
           it { should have_selector('title', text: 'Sign In') }
+          it { should_not have_link('Account') }
         end
 
         describe "submitting to the update action" do
@@ -31,6 +32,19 @@ describe "authentication" do
           # When we try to visit index via users_path it should redirect to signin
           before {visit users_path }
           it { should have_selector('title', text: "Sign In")}
+        end
+
+        describe "in the Microposts controller" do
+          before { post microposts_path } #ie: before creating micropost
+          specify { response.should redirect_to(signin_path) }
+        end
+
+        describe "submitting to the destroy action" do
+          before do
+            micropost = FactoryGirl.create(:micropost)
+            delete micropost_path(micropost)
+          end
+          specify { response.should redirect_to(signin_path) }
         end
       end
 
@@ -47,6 +61,17 @@ describe "authentication" do
             page.should have_selector('title', text: "Edit User")
           end
         end
+
+        describe "after signing in a second time" do
+          before do
+            click_link 'Sign Out'
+            sign_in user
+          end
+
+          it "should direct to the default page and not old redirect page" do
+            page.should have_selector('title', text: user.name)
+          end
+        end
       end
 
       describe "as a non-admin user" do
@@ -58,6 +83,20 @@ describe "authentication" do
         describe "submitting a DELETE request to the Users#destroy action" do
           before { delete user_path(user) }
           specify { response.should redirect_to(root_path) }
+        end
+      end
+
+      describe "as an admin user" do
+        let(:user) { FactoryGirl.create(:user) }
+        let(:admin_user) { FactoryGirl.create(:admin) }
+        before { sign_in admin_user }
+
+        describe "the admin should not be able to delete self" do
+          before { delete user_path(admin_user) }
+          specify { response.should redirect_to(users_path) }
+
+          # FOR SOME REASON NOT CATCHING THIS ERROR THAT IS THROWN IN Users#destroy
+          it { should have_selector("div.alert.alert-error") }
         end
       end
     end

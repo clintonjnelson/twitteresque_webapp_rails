@@ -2,8 +2,10 @@ SampleApp::Application.routes.draw do
 
   # Keep this temporarily for routing to work, but doesn't follow REST so will later update
   # get 'users/new' deleted this because now have our resources :users
+  resources :microposts,  only: [:create, :destroy]
+  resources :sessions,    only: [:create, :destroy, :new]
   resources :users
-  resources :sessions, only: [:new, :create, :destroy]
+
 
   # Root Directory Route
   root to: 'static_pages#home'

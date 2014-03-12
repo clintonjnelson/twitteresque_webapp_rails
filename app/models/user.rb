@@ -21,6 +21,7 @@
 class User < ActiveRecord::Base
   # Load getters/setters, & instance variables
   attr_accessible :email, :name, :password, :password_confirmation
+  has_many :microposts, dependent: :destroy
 
   # Load password creator/authenticator management method
   # Uses BCrypt for encryption
@@ -45,8 +46,13 @@ class User < ActiveRecord::Base
   validates(:password, length: { minimum: 6 })
   validates(:password_confirmation, presence: true)
 
-  private
+  def feed
+    # REST WILL BE FILLED OUT IN CHAPTER 11 FOR FOLLOWED USERS
+    Micropost.where("user_id = ?", id)
+  end
 
+
+  private
   # Method to create a random string & update the database attribute remember_token
   def create_remember_token
     self.remember_token = SecureRandom.urlsafe_base64
