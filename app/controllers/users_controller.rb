@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   # We can use whatever the before filter avails to us - IV's, etc. (See "edit")
-  before_filter :signed_in_user,    only: [:edit, :update, :index]
+  before_filter :signed_in_user,    only: [:edit, :update, :index,
+                                           :followers, :following]
   before_filter :correct_user,      only: [:edit, :update]
   before_filter :admin_user,        only: [:destroy]
   before_filter :protect_newcreate, only: [:new, :create]
@@ -43,6 +44,20 @@ class UsersController < ApplicationController
     # Grab the user info per the passed :id, so we can use & display it as desired.
     @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
+  end
+
+  def followers
+      @title = "Followers"
+      @user = User.find(params[:id])
+      @users = @user.followers.paginate(page: (params[:page]))
+      render "show_follow"
+  end
+
+  def following
+    @title = 'Following'
+    @user = User.find(params[:id])
+    @users = @user.followed_users.paginate(page: (params[:page]))
+    render 'show_follow'
   end
 
   ############# ADMIN or All User Actions #############

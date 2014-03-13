@@ -27,9 +27,14 @@ describe User do
   it { should respond_to(:password_confirmation)  }
   it { should respond_to(:remember_token)         }
   it { should respond_to(:authenticate)           }
-  it { should respond_to(:admin) }
-  it { should respond_to(:microposts)}
-  it { should respond_to(:feed)}
+  it { should respond_to(:admin)                  }
+  it { should respond_to(:microposts)             }
+  it { should respond_to(:feed)                   }
+  it { should respond_to(:relationships)          }
+  it { should respond_to(:followed_users)         }   # our fake map attribute
+  it { should respond_to(:follow!)                }
+  it { should respond_to(:following?)             }
+  it { should respond_to(:unfollow!)              }
   it { should be_valid }  # Verifies initial @user object is valid
   it { should_not be_admin }
 
@@ -169,7 +174,7 @@ describe User do
   #       @user.destroy
   # end
 
-  ######################## Microposts ###########################
+  ################################# Microposts #################################
   describe "micropost associations" do
     before { @user.save }
 
@@ -198,10 +203,55 @@ describe User do
       let(:unfollowed_post) do
         FactoryGirl.create(:micropost, user: FactoryGirl.create(:user))
       end
+      let(:followed_user) { FactoryGirl.create(:user) }
+
+      before do
+        @user.follow!(followed_user)
+        3.times { followed_user.microposts.create!(content: "Lorem Ipsum") }
+      end
 
       its(:feed) { should include(newer_micropost) }
       its(:feed) { should include(older_micropost) }
       its(:feed) { should_not include(unfollowed_post)}
+      its(:feed) do
+        followed_user.microposts.each do |micropost|
+          should include(micropost) #Feed should include each followed users micropost
+        end
+      end
+    end
+  end
+
+  ############################### Relationships ################################
+  describe "following" do
+    let(:other_user) { FactoryGirl.create(:user) }
+    before do
+      @user.save
+      @user.follow!(other_user)
+    end
+
+    it { should be_following(other_user) }
+    its(:followed_users) { should include(other_user) }
+
+    describe "other users, if deleted, should destroy the relationships user had" do
+      relationships = @user.relationships
+      @user.destroy
+
+      relationships.each do |relationship|
+        Relationship.find_by_follower_id(relationship.follower_id).should be_nil
+      end
+    end
+
+    describe "other users should be able to unfollow any followed user" do
+      before { @user.unfollow!(other_user) }
+
+      it { should_not be_following(other_user) }          # direct check db
+      its(:followed_users) { should_not include(other_user)} # check fake attribute
+    end
+
+    describe "followed user" do
+      # Temp flip subject & user positions to check ":followers" more fluidly
+      subject { other_user }
+      its(:followers) { should include(@user) } #check other fake attribute (reverse lookup)
     end
   end
 end
