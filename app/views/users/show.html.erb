@@ -26,20 +26,3 @@
 
   </div>
 </div>
-
-
-</br>
-</br>
-
-<p>
-  Note that this page references the data from the controller which has to get
-  the data from the database. It gets the data by using a "find" command for ActiveResource and passing the params[:id] that was supplied in the URI.
-</p>
-<p>
-  It should be noted that it appears that Rails supposes that the first number provided after the 3000/users/_num-here_ is going to be the :id of the users Table to pull. This is visible in how the Request says that "params" consists of: {"id" => "1"}
-</p>
-<p>
-  ActiveRecord pulls the whole row of data (all columns... except probably the secured ones like the encrypted password... but maybe even that one) and holds it in the controller in the IV that was named in the call of ActiveRecord (such as @user = User.find(params[:id]) where @user would be the IV storing the info from the User.find pull). Now this info can be called from the view... this is supposing that the :id passed is in fact a valid id number in the database.
-</p>
-
-
