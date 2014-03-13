@@ -6,7 +6,7 @@
       <h1>  <%= @user.name %> </h1>
       <span> <%= link_to "View My Profile", @user %> </span>
       </br>
-      <span> <b> Microposts:</b> <%= @user.microposts.count %></span>
+      <span> <b> Notes: </b> <%= @user.microposts.count %></span>
     </section>
     <section>
       <%= render 'shared/stats' %>
